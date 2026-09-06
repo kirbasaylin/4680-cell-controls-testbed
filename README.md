@@ -57,3 +57,7 @@ homing and physical stopping tests are still to be done. The safety permissive i
 supervisory input, not a PROFIsafe implementation.
 
 [Test status](docs/EVIDENCE.md) · [Commissioning plan](docs/COMMISSIONING.md) · [References](docs/REFERENCES.md)
+
+## Next revision
+
+[Proposed parameters and regression plan](docs/REQUIREMENTS.md). These targets are separate from the current model results.
