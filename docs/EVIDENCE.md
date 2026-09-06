@@ -1,23 +1,16 @@
-# Evidence register — 4680 Cell Manufacturing Controls Testbed
+# Test status
 
-Revision A · 2026-09-05 · Independent educational engineering project
+The Python sequence and fault tests run locally and in GitHub Actions. The SCL source
+has not been compiled in TIA Portal. No drive or physical I/O measurements are included.
 
-| Artifact | Evidence class | Status |
-|---|---|---|
-| Python model and automated tests | Executable software | Run locally; see results/verification.txt |
-| CSV traces and metrics | Synthetic model output | Reproducible with python demo.py |
-| Architecture and engineering schedules | Concept design | Review draft |
-| Vendor IDE compilation / physical I/O | Integration | Not performed |
-| Oscilloscope, drive traces, real network timing | Hardware measurement | Not collected |
-| Functional safety and code compliance | Independent validation | Not established |
+## Reproduce the results
 
-No customer affiliation, factory deployment, vendor endorsement, certification,
-or historical commissioning is asserted. Documentation and source were prepared
-with AI assistance and require owner review. Do not backdate this project to 2025.
-Vendor names identify intended integration targets only.
+Run `python -m unittest discover -s tests -v`, then `python demo.py` from the repository
+root. The saved local log is [verification.txt](../results/verification.txt).
+[GitHub Actions](https://github.com/kirbasaylin/4680-cell-controls-testbed/actions) runs the same commands.
 
-## Release boundary
-These models cannot enforce a machine safety function. Their Boolean fault inputs
-model supervisory behavior, not PROFIsafe/FSoE telegrams or certified safety logic.
-Physical implementation needs a risk assessment, selected hardware manuals,
-validated safety application, electrical review and supervised commissioning.
+CSV/JSON outputs are model results. The PNG figure summarizes those outputs.
+The [design notes](DESIGN.md) record assumptions; the [commissioning plan](COMMISSIONING.md)
+lists the hardware work still needed.
+
+No physical commissioning or safety certification has been completed for this project.

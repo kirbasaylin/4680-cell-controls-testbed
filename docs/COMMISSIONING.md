@@ -20,5 +20,5 @@ software revision, stimulus, expected response, observed response and raw eviden
 
 ## Software reproducibility
 Run `python -m unittest discover -s tests -v`, then `python demo.py` from this repository.
-Saved `results/verification.txt` captures the local run. CI is configured but has not
-run on GitHub until you publish. No native-PLC test coverage is implied.
+Saved `results/verification.txt` captures the local run. [GitHub Actions](https://github.com/kirbasaylin/4680-cell-controls-testbed/actions)
+runs the Python tests on each push. Vendor source is not covered by these tests.
