@@ -1,0 +1,79 @@
+// Standard PLC supervisory draft. NOT an F-program. Not compiled in TIA Portal.
+// Call cyclically with elapsed scan time in seconds; wire motion feedback separately.
+FUNCTION_BLOCK "FB_CellSequence"
+VAR_INPUT
+    Start : Bool;
+    Reset : Bool;
+    SafetyPermissive : Bool;
+    NetworkHealthy : Bool;
+    DriveHealthy : Bool;
+    Jam : Bool;
+    PartPresent : Bool;
+    ExitClear : Bool;
+    IndexDone : Bool;
+    Scan_s : Real;
+    Dwell_s : Real;
+    Timeout_s : Real;
+END_VAR
+VAR_OUTPUT
+    State : Int := 0; // 0 Idle,10 Feed,20 Index,30 Dwell,40 Eject,50 Complete,90 Fault
+    ConveyorRun : Bool;
+    IndexExecute : Bool;
+    Alarm : Int; // 1 safety,2 network,3 drive,4 jam,5 timeout,6 parameters
+    Completed : DInt;
+END_VAR
+VAR
+    LastStart : Bool;
+    LastReset : Bool;
+    Elapsed_s : Real;
+END_VAR
+VAR_TEMP
+    StartEdge : Bool;
+    ResetEdge : Bool;
+    Cause : Int;
+END_VAR
+BEGIN
+    #StartEdge := #Start AND NOT #LastStart;
+    #ResetEdge := #Reset AND NOT #LastReset;
+    #LastStart := #Start;
+    #LastReset := #Reset;
+    #ConveyorRun := FALSE;
+    #IndexExecute := FALSE;
+    #Cause := 0;
+    IF NOT #SafetyPermissive THEN #Cause := 1;
+    ELSIF NOT #NetworkHealthy THEN #Cause := 2;
+    ELSIF NOT #DriveHealthy THEN #Cause := 3;
+    ELSIF #Jam THEN #Cause := 4;
+    ELSIF (#Scan_s <= 0.0) OR (#Dwell_s <= 0.0) OR (#Timeout_s <= #Dwell_s) THEN #Cause := 6;
+    END_IF;
+    IF #Cause <> 0 THEN
+        IF #State <> 90 THEN #Alarm := #Cause; END_IF;
+        #State := 90;
+    END_IF;
+    IF #State = 90 THEN
+        IF (#Cause = 0) AND #ResetEdge AND NOT #Start THEN
+            #Alarm := 0; #State := 0; #Elapsed_s := 0.0;
+        END_IF;
+        RETURN;
+    END_IF;
+    #Elapsed_s := #Elapsed_s + #Scan_s;
+    CASE #State OF
+        0: IF #StartEdge THEN #State := 10; #Elapsed_s := 0.0; END_IF;
+        10:
+            IF #PartPresent THEN #State := 20; #Elapsed_s := 0.0;
+            ELSE #ConveyorRun := TRUE; END_IF;
+        20:
+            #IndexExecute := TRUE;
+            IF #IndexDone THEN #IndexExecute := FALSE; #State := 30; #Elapsed_s := 0.0; END_IF;
+        30: IF #Elapsed_s >= #Dwell_s THEN #State := 40; #Elapsed_s := 0.0; END_IF;
+        40:
+            IF #ExitClear THEN #Completed := #Completed + 1; #State := 50; #Elapsed_s := 0.0;
+            ELSE #ConveyorRun := TRUE; END_IF;
+        50: IF NOT #Start THEN #State := 0; #Elapsed_s := 0.0; END_IF;
+        ELSE #State := 90; #Alarm := 6;
+    END_CASE;
+    IF (#State >= 10) AND (#State <= 40) AND (#Elapsed_s >= #Timeout_s) THEN
+        #State := 90; #Alarm := 5;
+        #ConveyorRun := FALSE; #IndexExecute := FALSE;
+    END_IF;
+END_FUNCTION_BLOCK

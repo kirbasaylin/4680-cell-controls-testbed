@@ -1,0 +1,17 @@
+Local Python verification | 2026-09-05
+Python 3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]
+Command: python -m unittest discover -s tests -v
+
+test_blocked_exit_times_out (test_model.CellTests.test_blocked_exit_times_out) ... ok
+test_fault_requires_reset_then_fresh_start (test_model.CellTests.test_fault_requires_reset_then_fresh_start) ... ok
+test_faults_inhibit_every_active_state (test_model.CellTests.test_faults_inhibit_every_active_state) ... ok
+test_first_fault_retained (test_model.CellTests.test_first_fault_retained) ... ok
+test_held_start_does_not_repeat (test_model.CellTests.test_held_start_does_not_repeat) ... ok
+test_missing_part_times_out (test_model.CellTests.test_missing_part_times_out) ... ok
+test_nominal_cycle_exactly_once (test_model.CellTests.test_nominal_cycle_exactly_once) ... ok
+test_recipe_validation_and_lock (test_model.CellTests.test_recipe_validation_and_lock) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.005s
+
+OK

@@ -1,0 +1,12 @@
+tag,direction,type,description
+Start,IN,BOOL,Operator start
+Reset,IN,BOOL,Operator reset
+SafetyPermissive,IN,BOOL,Diagnostic copy from separate safety system
+NetworkHealthy,IN,BOOL,Device health abstraction
+DriveHealthy,IN,BOOL,Drive ready abstraction
+Jam,IN,BOOL,Jam detection abstraction
+PartPresent,IN,BOOL,Infeed sensor
+ExitClear,IN,BOOL,Exit zone clear
+IndexDone,IN,BOOL,Motion adapter feedback
+ConveyorRun,OUT,BOOL,VFD run request
+IndexExecute,OUT,BOOL,Motion adapter request

@@ -1,0 +1,13 @@
+{
+  "nominal": {
+    "completed_parts": 2,
+    "fault_scans": 0,
+    "final_state": "IDLE"
+  },
+  "jam_recovery": {
+    "completed_parts": 1,
+    "fault_scans": 35,
+    "final_state": "IDLE"
+  },
+  "evidence": "Synthetic discrete-time model; not PLC or drive measurements"
+}
